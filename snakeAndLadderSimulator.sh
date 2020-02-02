@@ -12,6 +12,7 @@ WINNING_POSITION=100
 #declare position
 position=0
 count=0
+player=2
 
 #function rolldie
 function rollDie()
@@ -22,34 +23,63 @@ function rollDie()
 #declare a dictionary
 declare -A checkRollDie
 
-#function to check player options 
+#function to check player options
 function getPlayerOptions()
 {
-	while [[ $position -lt $WINNING_POSITION ]]
-	do
-		rollDie
-		CheckPlayerNextMove=$((RANDOM%3))
-		case $CheckPlayerNextMove in
+	rollDie
+	CheckPlayerNextMove=$((RANDOM%3))
+	case $CheckPlayerNextMove in
 			$NO_PLAY)
-						position=$position
-						;;
+				position=$position
+				;;
 			$LADDER)
-						position=$((position + rolldie))
-						;;
+				position=$((position + rolldie))
+				;;
 			$SNAKE)
-						position=$((position - rolldie))
-		esac
-			if [[ $position -gt $WINNING_POSITION ]]
-			then
 				position=$((position - rolldie))
-				elif [[ $position -lt 0 ]]
-				then
-					position=$START_POSITION
-			fi
-			checkRollDie[count]=$position
-			((count++))
-	done
+	esac
 }
-#calling fuction
-getPlayerOptions
 
+#function to check position
+function getWinningPosition()
+{
+	while [[ $position -ne $WINNING_POSITION ]]
+	do
+		#calling all function here
+		getPlayer
+		getPlayerOptions
+		getExactPosition
+
+		#store position of player at count
+		checkRollDie[count]=$position
+		((count++))
+	done
+		echo "Winner Player Is : Player $player"
+}
+
+#function to check exact player position 100
+function getExactPosition()
+{
+	if [[ $position -gt $WINNING_POSITION ]]
+	then
+		position=$((position - rolldie))
+		elif [[ $position -lt $START_POSITION ]]
+		then
+			position=$START_POSITION
+	fi
+}
+
+
+#function to check player 
+function getPlayer()
+{
+	if [[ $player -eq 1 ]]
+	then
+		player=2
+	else
+		player=1
+	fi
+}
+
+#calling winning function
+getWinningPosition
