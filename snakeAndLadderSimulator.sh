@@ -6,6 +6,8 @@ echo "WELCOME SNAKE AND LADDER SIMULATOR"
 NO_PLAY=0
 LADDER=1
 SNAKE=2
+START_POSITION=0
+WINNING_POSITION=100
 
 #declare position
 position=0
@@ -16,24 +18,30 @@ function rollDie()
 	echo $rolldie
 }
 
-rollDie
-
 #function to check player options 
 function getPlayerOptions()
 {
-	CheckPlayerNextMove=$((RANDOM%3))
-	case $CheckPlayerNextMove in
+	while [[ $position -lt $WINNING_POSITION ]]
+	do
+		CheckPlayerNextMove=$((RANDOM%3))
+		case $CheckPlayerNextMove in
 			$NO_PLAY)
-						playerposition=$position
+						position=$position
 						;;
 			$LADDER)
-						playerposition=$((position + rolldie))
+						position=$((position + rolldie))
 						;;
 			$SNAKE)
-						playerposition=$((position - rolldie))
-	esac
-	echo $playerposition
+						position=$((position - rolldie))
+		esac
+			if [[ $position -lt 0 ]]
+				then
+					position=$START_POSITION
+				fi
+				echo "player current position :$position"
+	done
 }
 #calling fuction
+rollDie
 getPlayerOptions
 
