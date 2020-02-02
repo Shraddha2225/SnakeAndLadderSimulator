@@ -15,7 +15,6 @@ position=0
 function rollDie()
 {
 	rolldie=$((RANDOM % 6 + 1))
-	echo $rolldie
 }
 
 #function to check player options 
@@ -23,6 +22,7 @@ function getPlayerOptions()
 {
 	while [[ $position -lt $WINNING_POSITION ]]
 	do
+		rollDie
 		CheckPlayerNextMove=$((RANDOM%3))
 		case $CheckPlayerNextMove in
 			$NO_PLAY)
@@ -34,14 +34,15 @@ function getPlayerOptions()
 			$SNAKE)
 						position=$((position - rolldie))
 		esac
-			if [[ $position -lt 0 ]]
+			if [[ $position -gt $WINNING_POSITION ]]
+			then
+				position=$((position - rolldie))
+				elif [[ $position -lt 0 ]]
 				then
 					position=$START_POSITION
-				fi
-				echo "player current position :$position"
+			fi
 	done
 }
 #calling fuction
-rollDie
 getPlayerOptions
 
