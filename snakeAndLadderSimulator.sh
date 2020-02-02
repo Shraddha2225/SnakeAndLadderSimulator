@@ -11,11 +11,16 @@ WINNING_POSITION=100
 
 #declare position
 position=0
+count=0
 
+#function rolldie
 function rollDie()
 {
 	rolldie=$((RANDOM % 6 + 1))
 }
+
+#declare a dictionary
+declare -A checkRollDie
 
 #function to check player options 
 function getPlayerOptions()
@@ -41,6 +46,8 @@ function getPlayerOptions()
 				then
 					position=$START_POSITION
 			fi
+			checkRollDie[count]=$position
+			((count++))
 	done
 }
 #calling fuction
